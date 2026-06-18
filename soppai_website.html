@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soppai Intellisense — Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0D14;
+    --bg-grid: #111520;
+    --orange: #FFA552;
+    --orange-dim: rgba(255, 165, 82, 0.15);
+    --orange-glow: rgba(255, 165, 82, 0.06);
+    --white: #F5F0EA;
+    --slate: #6B7590;
+    --slate-light: #9AA3BE;
+    --border: rgba(255, 165, 82, 0.2);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+  }
+
+  .logo-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .logo-svg {
+    width: 72px;
+    height: 72px;
+    filter: drop-shadow(0 0 20px rgba(255, 165, 82, 0.4));
+  }
+
+  .wordmark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--white);
+  }
+
+  .wordmark span {
+    color: var(--orange);
+  }
+
+  .subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 0.4rem;
+  }
+
+  .tagline {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 300;
+    color: var(--slate-light);
+    max-width: 420px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto 3rem;
+  }
+
+  .notify-form {
+    display: flex;
+    gap: 0;
+    max-width: 380px;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(8px);
+    margin-bottom: 1rem;
+  }
+
+  .notify-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0.85rem 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--white);
+  }
+
+  .notify-form input::placeholder { color: var(--slate); }
+
+  .notify-form button {
+    background: var(--orange);
+    border: none;
+    padding: 0.85rem 1.3rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .notify-form button:hover { background: #e85d20; }
+
+  .note {
+    font-size: 0.72rem;
+    color: var(--slate);
+    letter-spacing: 0.03em;
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .success-msg {
+    display: none;
+    font-size: 0.85rem;
+    color: var(--orange);
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.05em;
+    padding: 0.85rem 0;
+  }
+
+  @media (max-width: 480px) {
+    .notify-form { flex-direction: column; border-radius: 8px; }
+    .notify-form button { border-radius: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    canvas { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="page">
+  <div class="eyebrow">Coming Soon</div>
+
+  <div class="logo-group">
+    <!-- Soppai node-network logo mark -->
+    <svg class="logo-svg" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Orange cluster (top-right) -->
+      <circle cx="48" cy="18" r="5.5" fill="#FFA552"/>
+      <circle cx="60" cy="28" r="3.5" fill="#FFA552" opacity="0.85"/>
+      <circle cx="54" cy="36" r="4" fill="#FFA552" opacity="0.7"/>
+      <circle cx="42" cy="30" r="3" fill="#FFA552" opacity="0.6"/>
+      <!-- Connections orange cluster -->
+      <line x1="48" y1="18" x2="60" y2="28" stroke="#FFA552" stroke-width="1" opacity="0.5"/>
+      <line x1="60" y1="28" x2="54" y2="36" stroke="#FFA552" stroke-width="1" opacity="0.4"/>
+      <line x1="48" y1="18" x2="54" y2="36" stroke="#FFA552" stroke-width="1" opacity="0.35"/>
+      <line x1="54" y1="36" x2="42" y2="30" stroke="#FFA552" stroke-width="1" opacity="0.35"/>
+      <line x1="48" y1="18" x2="42" y2="30" stroke="#FFA552" stroke-width="1" opacity="0.3"/>
+      <!-- Bridge connection -->
+      <line x1="42" y1="30" x2="32" y2="44" stroke="#FFA552" stroke-width="0.8" opacity="0.25"/>
+      <!-- White/light cluster (bottom-left) -->
+      <circle cx="24" cy="54" r="5" fill="#F5F0EA"/>
+      <circle cx="14" cy="44" r="3.5" fill="#F5F0EA" opacity="0.8"/>
+      <circle cx="32" cy="44" r="3" fill="#F5F0EA" opacity="0.7"/>
+      <circle cx="20" cy="38" r="2.5" fill="#F5F0EA" opacity="0.55"/>
+      <!-- Connections white cluster -->
+      <line x1="24" y1="54" x2="14" y2="44" stroke="#F5F0EA" stroke-width="1" opacity="0.45"/>
+      <line x1="14" y1="44" x2="20" y2="38" stroke="#F5F0EA" stroke-width="1" opacity="0.35"/>
+      <line x1="24" y1="54" x2="32" y2="44" stroke="#F5F0EA" stroke-width="1" opacity="0.4"/>
+      <line x1="32" y1="44" x2="20" y2="38" stroke="#F5F0EA" stroke-width="1" opacity="0.3"/>
+      <line x1="14" y1="44" x2="32" y2="44" stroke="#F5F0EA" stroke-width="0.8" opacity="0.25"/>
+    </svg>
+
+    <div>
+      <div class="wordmark">Soppai <span>Intellisense</span></div>
+      <div class="subtitle">Solar Forecasting Platform</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="tagline">Intelligent solar irradiance forecasting, powered by real-time sky analysis and machine learning.</p>
+
+  <div class="notify-form" id="form-wrap">
+    <input type="email" placeholder="Enter your email for early access" id="email-input">
+    <button onclick="handleSubmit()">Notify Me</button>
+  </div>
+  <div class="success-msg" id="success">You're on the list. We'll be in touch.</div>
+  <div class="note">No spam. Just a heads-up when we launch.</div>
+</div>
+
+<div class="footer">© 2025 Soppai Intellisense</div>
+
+<script>
+// Node network animation
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H, nodes = [], animId;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+const ORANGE = '#FFA552';
+const WHITE = '#F5F0EA';
+
+function initNodes() {
+  nodes = [];
+  const count = Math.floor((W * H) / 22000);
+  for (let i = 0; i < count; i++) {
+    const isOrange = Math.random() > 0.55;
+    nodes.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 2 + 1.2,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      color: isOrange ? ORANGE : WHITE,
+      pulse: Math.random() * Math.PI * 2,
+    });
+  }
+}
+
+function draw(t) {
+  ctx.clearRect(0, 0, W, H);
+
+  // Subtle grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+  ctx.lineWidth = 0.5;
+  const gs = 60;
+  for (let x = 0; x < W; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Update + draw nodes
+  const maxDist = 130;
+  for (let i = 0; i < nodes.length; i++) {
+    const n = nodes[i];
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < -10) n.x = W + 10;
+    if (n.x > W + 10) n.x = -10;
+    if (n.y < -10) n.y = H + 10;
+    if (n.y > H + 10) n.y = -10;
+    n.pulse += 0.012;
+
+    // Connections
+    for (let j = i + 1; j < nodes.length; j++) {
+      const m = nodes[j];
+      const dx = n.x - m.x, dy = n.y - m.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < maxDist) {
+        const alpha = (1 - dist / maxDist) * 0.18;
+        const sameColor = n.color === m.color;
+        ctx.strokeStyle = sameColor
+          ? (n.color === ORANGE ? `rgba(255,107,43,${alpha})` : `rgba(245,240,234,${alpha * 0.7})`)
+          : `rgba(200,150,100,${alpha * 0.5})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(n.x, n.y);
+        ctx.lineTo(m.x, m.y);
+        ctx.stroke();
+      }
+    }
+
+    // Node dot with pulse
+    const pulseR = n.r + Math.sin(n.pulse) * 0.4;
+    const alpha = 0.55 + Math.sin(n.pulse) * 0.2;
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = n.color;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, pulseR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  animId = requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => { resize(); initNodes(); });
+resize();
+initNodes();
+requestAnimationFrame(draw);
+
+// Email form
+function handleSubmit() {
+  const input = document.getElementById('email-input');
+  if (!input.value || !input.value.includes('@')) {
+    input.style.outline = '1px solid #FFA552';
+    setTimeout(() => input.style.outline = '', 1200);
+    return;
+  }
+  document.getElementById('form-wrap').style.display = 'none';
+  document.getElementById('success').style.display = 'block';
+}
+</script>
+</body>
+</html>
