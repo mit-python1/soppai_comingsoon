@@ -12,7 +12,7 @@
   :root {
     --bg: #0A0D14;
     --bg-grid: #111520;
-    --orange: #FFA552;
+    --orange: ##FF5D41;
     --orange-dim: rgba(255, 165, 82, 0.15);
     --orange-glow: rgba(255, 165, 82, 0.06);
     --white: #F5F0EA;
@@ -232,7 +232,7 @@ function resize() {
   H = canvas.height = window.innerHeight;
 }
 
-const ORANGE = '#FFA552';
+const ORANGE = '##FF5D41';
 const WHITE = '#F5F0EA';
 
 function initNodes() {
@@ -315,7 +315,7 @@ requestAnimationFrame(draw);
 function handleSubmit() {
   const input = document.getElementById('email-input');
   if (!input.value || !input.value.includes('@')) {
-    input.style.outline = '1px solid #FFA552';
+    input.style.outline = '1px solid ##FF5D41';
     setTimeout(() => input.style.outline = '', 1200);
     return;
   }
