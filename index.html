@@ -22,11 +22,10 @@
   }
 
   html, body {
-    height: 100%;
+    min-height: 100%;
     background: var(--bg);
     color: var(--white);
     font-family: 'Inter', sans-serif;
-    overflow: hidden;
   }
 
   canvas {
@@ -160,16 +159,13 @@
   }
 
   .footer {
-    position: fixed;
-    bottom: 2rem;
-    left: 0;
-    right: 2rem;
-    text-align: right;
-    font-size: 0.68rem;
-    color: var(--slate);
-    letter-spacing: 0.08em;
-    text-transform: none;
-  }
+  position: relative;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  font-size: 0.68rem;
+  color: var(--slate);
+  letter-spacing: 0.08em;
+}
 
   .success-msg {
     display: none;
@@ -188,6 +184,157 @@
   @media (prefers-reduced-motion: reduce) {
     canvas { display: none; }
   }
+
+/* ---------- SHARED SECTION STYLES ---------- */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.eyebrow-sm {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--white);
+}
+
+/* ---------- CONTACT ---------- */
+#contact { text-align: center; }
+
+#contact .email a {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 600;
+  color: var(--white);
+  text-decoration: none;
+  border-bottom: 1px solid var(--orange);
+  padding-bottom: 4px;
+  transition: color 0.2s;
+}
+
+#contact .email a:hover { color: var(--orange); }
+
+/* ---------- ABOUT ---------- */
+#about p {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--slate-light);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.placeholder {
+  border: 1px dashed var(--border);
+  background: var(--orange-glow);
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  font-style: italic;
+  color: var(--slate-light);
+}
+
+/* ---------- PRODUCT RANGE ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--bg-grid);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.75rem 1.4rem;
+  text-align: left;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: var(--orange);
+  transform: translateY(-3px);
+}
+
+.card .node-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--orange-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.card .node-dot::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+.card h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+}
+
+.card p.short,
+.card p.full {
+  font-size: 0.85rem;
+  color: var(--slate-light);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.card .full {
+  display: none;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.9rem;
+}
+
+.card.open .full { display: block; }
+.card.open p.short { display: none; }
+
+.read-more {
+  border: none;
+  background: none;
+  color: var(--orange);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  padding: 0;
+}
+
+.read-more:hover { text-decoration: underline; }
+
+ 
 </style>
 </head>
 <body>
@@ -208,9 +355,62 @@
   </div>
 
   <div class="divider"></div>
+</div>
 
+<!-- CONTACT -->
+<section id="contact">
+  <div class="eyebrow-sm">Contact</div>
+  <div class="section-title">Get in touch</div>
+  <div class="email"><a href="mailto:sales@soppai.com">sales@soppai.com</a></div>
+</section>
 
-  
+<!-- ABOUT -->
+<section id="about">
+  <div class="eyebrow-sm">About</div>
+  <div class="section-title">About Soppai Intellisense</div>
+  <p class="placeholder">[ Papa's content goes here — company background, mission, what Soppai Intellisense does. ]</p>
+</section>
+
+<!-- PRODUCT RANGE -->
+<section id="products">
+  <div class="eyebrow-sm">Product Range</div>
+  <div class="section-title">What we offer</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="node-dot"></div>
+      <h4>Product 1</h4>
+      <p class="short">[ Short one-line description placeholder ]</p>
+      <p class="full">[ Full product description placeholder ]</p>
+      <button class="read-more" onclick="toggleCard(this)">Read more</button>
+    </div>
+
+    <div class="card">
+      <div class="node-dot"></div>
+      <h4>Product 2</h4>
+      <p class="short">[ Short one-line description placeholder ]</p>
+      <p class="full">[ Full product description placeholder ]</p>
+      <button class="read-more" onclick="toggleCard(this)">Read more</button>
+    </div>
+
+    <div class="card">
+      <div class="node-dot"></div>
+      <h4>Product 3</h4>
+      <p class="short">[ Short one-line description placeholder ]</p>
+      <p class="full">[ Full product description placeholder ]</p>
+      <button class="read-more" onclick="toggleCard(this)">Read more</button>
+    </div>
+
+    <div class="card">
+      <div class="node-dot"></div>
+      <h4>Product 4</h4>
+      <p class="short">[ Short one-line description placeholder ]</p>
+      <p class="full">[ Full product description placeholder ]</p>
+      <button class="read-more" onclick="toggleCard(this)">Read more</button>
+    </div>
+
+  </div>
+</section>
 
 <div class="footer">© 2026 SoppAI Intellisense</div>
 
@@ -244,7 +444,12 @@ function initNodes() {
     });
   }
 }
-
+ 
+function toggleCard(btn) {
+  const card = btn.closest('.card');
+  card.classList.toggle('open');
+  btn.textContent = card.classList.contains('open') ? 'Show less' : 'Read more';
+}
 function draw(t) {
   ctx.clearRect(0, 0, W, H);
 
